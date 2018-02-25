@@ -81,24 +81,13 @@ def fileFinder(chosenFile): #Finds a file without a extension
                                                                     #and it grabs whatever extension it is.
         return infile #Returns the file extension
 
-def fileSizeFinder(size): #Finds the size of a file, i don't know how to more efficiently do it 
-    if size > 1024:
+def fileSizeFinder(size): #Finds the size of a file 
+    #Thanks Blue for teaching me Enumerate and other things
+    ByteList = [" B", " MB", " KB", " GB", " TB", " PB"]
+    for SVal in ByteList:
+        print(size, SVal)
         size /= 1024
-        if size > 1024:
-            size /= 1024
-            if size > 1024:
-                size /= 1024
-                if size > 1024:
-                    print("Too big!")
-                else:
-                    print(round(size, 2), " terabytes")
-            else:
-                print(round(size, 2), " gigabytes")
-        else:
-            print(round(size, 2), " kilobytes")
-    else:
-        print(size, " bytes")
-
+            
 fileDir = changeDir(dLetter)
 
 
@@ -141,8 +130,7 @@ while True:
                 print("\nFile doesn't exist!")
                 continue
             else:
-                fileSizeFinder(size) #Pretty prints it 
- 
+                fileSizeFinder(size) #Pretty prints it
     elif option == '5':
         while True:
             fNameAndExtension = input("\nWhat's the filename and extension you want it to be? ")
@@ -150,7 +138,6 @@ while True:
                 os.open(fNameAndExtension, os.O_RDWR|os.O_CREAT|os.O_EXCL) # os.O_RDWR, os.O_CREAT and os.O_EXCL means get readable and writeable permissions of the file
                                                                            #If it doesn't exist, os.O_CREAT, means create it. and EXCL is just there to make sure
                                                                            #that you don't create a file with the same name.
-                                                                        
                 break
             except:
                 print("\nFile already exists!")
