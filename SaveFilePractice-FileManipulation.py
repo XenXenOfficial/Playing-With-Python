@@ -4,7 +4,7 @@ Anything with
 try:
 except:
 is pythons way of catching errors. The following catches in the program
-is to make sure that the file actually exists. Except one special case on line 140.
+is to make sure that the file actually exists. Except one special case on line 133
 '''
 
 
@@ -26,7 +26,8 @@ def changeDir(change): #Change the directory and other things
         print("Ex. 'add *Folder name*', or type 'List' to view the folders ")
         uInput = input(">  ")
         if 'List' in uInput:
-            for i, i2, i3 in os.walk(fileDir): #This grabs i as a directory path, i2 as directory names, i3 as file names.
+            folders = [f for f in os.listdir() if os.path.isdir(f)]
+            for i in folders:
                 print(i)
         else:            
             addCheck = []
@@ -44,7 +45,6 @@ def changeDir(change): #Change the directory and other things
                                 fileDir = input("\nWhat do you want it changed to? (q to quit):  ")
                                 if fileDir not in ("\\", 'q'):
                                     fileDir += "\\" #Adds on the input value
-                                    print(fileDir)
                                     try:
                                         os.chdir(fileDir)
                                         uInput = 'n'
@@ -57,16 +57,12 @@ def changeDir(change): #Change the directory and other things
                     if 'n' in addCheck: #Checks if a n was sent instead
                         return fileDir 
                 if '~' in addCheck:             
-                    tempList = fileDir.split('\\') #Removes the \ in the filde dir and makes it into a list
-                    del tempList[-1] #Deletes the last part of the list 
-                    tempList = "\\".join(tempList) #Puts it back together with \
-                    fileDir = tempList #Changes the file directory
+                    fileDir = os.path.dirname(fileDir) 
             elif 'add' in addCheck:
-                tempFileDir = fileDir #temp value for file dir
-                del addCheck[0] #Deletes the first list value and value [1] gets put into [0]
-                fileDir += "\\" + addCheck[0] #Puts the modified value on
                 try:
-                    os.chdir(fileDir) #Checks if it exists
+                    tempFileDir = fileDir
+                    fileDir = fileDir + "\\" + addCheck[1]
+                    os.chdir(fileDir)
                 except FileNotFoundError:
                     print("That directory doesn't exist!")
                     fileDir = tempFileDir #Gets changed back to the temp value
@@ -83,19 +79,27 @@ def fileFinder(chosenFile): #Finds a file without a extension
 
 def fileSizeFinder(size): #Finds the size of a file 
     #Thanks Blue for teaching me Enumerate and other things
-    ByteList = [" B", " MB", " KB", " GB", " TB", " PB"]
-    for SVal in ByteList:
-        print(size, SVal)
-        size /= 1024
-            
+    byteList = [" B", " MB", " KB", " GB", " TB", " PB"]
+    for sVal in byteList:
+        if round(size, 3) > 0:
+            print(round(size, 3), SVal)
+            size /= 1024
+        
 fileDir = changeDir(dLetter)
 
 
-optionList = ["\n 1. List options", "\n 2. List files with extension", "\n 3. Create a folder", "\n 4. Get chosen file size",
-             "\n 5. Create a file","\n 6. Write to a file" ,"\n 7. Rename a file" , "\n 8. Change directory", "\n 9. Current Directory",
-             "\n ` Advanced creation (Access to Command Prompt)" ]
+optionList = ["1. List options", 
+              " 2. List files with extension", 
+              " 3. Create a folder", 
+              " 4. Get chosen file size",
+              " 5. Create a file",
+              " 6. Write to a file",
+              " 7. Rename a file" ,
+              " 8. Change directory", 
+              " 9. Current Directory",
+              " ` Advanced creation (Access to Command Prompt)" ]
 
-print("\n What do you want to do? ", '\n' , '\n'.join(optionList))
+print("\n What do you want to do? ", '\n\n' , '\n\n'.join(optionList))
 
 
 while True:
