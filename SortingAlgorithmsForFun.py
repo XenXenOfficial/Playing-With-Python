@@ -24,6 +24,12 @@ Basically the same thing as Bubble sort, but it goes both ways instead of just
 one way. It goes up the list and grabs the largest then places it, then
 goes down it and grabs the smallest and places it.
 '''
+GnomeList = []
+TrueLoop = True
+'''
+Also called Stupid sort, similar to insertion sort, but it swaps like bubble sort.
+'''
+
 while True: #Loops until the user put in a number
     try:
         Val = int(input("Put in a range: ")) #Gets a number from the user to make the range of the list (100 is 100 random numbers, 10 is 10 random, etc etc.)
@@ -39,6 +45,7 @@ for i in range(Val):
     InsertionList.append(RandomVal)
     ShakerList.append(RandomVal)
     SelectionList.append(RandomVal)
+    GnomeList.append(RandomVal)
 print("Heres the list", BubbleList)
 
 def BubbleSwap(x,y):
@@ -47,22 +54,30 @@ def BubbleSwap(x,y):
     y = temp #Makes y equal temp (Which was saved as the X val)
     return x,y 
 
-def InsertionSwap(x,y):
+def SwapFunction(x, y):
     x, y = y, x #Swaps the integers
     return x, y
 
 def SelectionSwap(minNum,y):
     minNum, y = y, minNum #Swaps the minimum value with the y value  
     return minNum, y
-    
-def CockTailShakerSwap(x,y):
-    x, y = y, x #Swaps
-    return x, y
 
+def GnomeSwap(x, y):
+    Position = 0
+    while Position < y:
+        if Position == 0:
+            Position += 1
+        if x[Position] >= x[Position - 1]:
+            Position += 1
+        else:
+            x[Position], x[Position - 1] = SwapFunction(x[Position], x[Position - 1])
+            Position -= 1
+    return(x)
+    
 for NumIns in range(len(InsertionList)-1,0, -1): #Goes down the list
     for i in range(NumIns):
         if InsertionList[i] > InsertionList[i + 1]: #Checks if its greater than the next 
-            InsertionList[i], InsertionList[i + 1] = InsertionSwap(InsertionList[i], InsertionList[i + 1]) #Swaps it
+            InsertionList[i], InsertionList[i + 1] = SwapFunction(InsertionList[i], InsertionList[i + 1]) #Swaps it
 
 for NumBub in range(len(BubbleList)-1,0, -1): #Goes down the list
     for i in range(NumBub):
@@ -78,11 +93,17 @@ for NumSel in range(len(SelectionList)-1,0, -1): #Goes down the list
 for NumCS in range(len(ShakerList)-1,0, -1): #Goes down the list
     for i in range(NumCS, 0, -1): #Goes down the list again for the i value
         if ShakerList[i] > ShakerList[i - 1]: #Checks if the value is less than the next
-            ShakerList[i], ShakerList[i - 1] = CockTailShakerSwap(ShakerList[i], ShakerList[i - 1]) #Swaps it
+            ShakerList[i], ShakerList[i - 1] = SwapFunction(ShakerList[i], ShakerList[i - 1]) #Swaps it
     for i in range(NumCS): #Goes up the list
         if ShakerList[i] > ShakerList[i + 1]: #Checks if the value is greater than the next 
-            ShakerList[i], ShakerList[i + 1] = CockTailShakerSwap(ShakerList[i], ShakerList[i + 1]) #Swaps it
+            ShakerList[i], ShakerList[i + 1] = SwapFunction(ShakerList[i], ShakerList[i + 1]) #Swaps it
+
+while TrueLoop == True:
+    YVal = len(GnomeList)
+    GnomeList = GnomeSwap(GnomeList, YVal)
+    TrueLoop = False
 
 print("\nHeres it sorted Via Bubble", BubbleList, " Heres it sorted with insertion", InsertionList)
 print("\nSorted through Selection", SelectionList, " Through the CockTail Shaker sort", ShakerList)
+print("\nSorted through Gnome", GnomeList)
 print("\nDone!")
