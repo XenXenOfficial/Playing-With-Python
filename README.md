@@ -1,2 +1,2 @@
 # Playing-With-Python
-The code I randomly write fir fun
+The code I randomly write for fun
