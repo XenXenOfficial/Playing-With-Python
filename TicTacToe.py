@@ -1,7 +1,7 @@
 import sys
 board = [[' ',' ',' '],
-        [' ',' ',' '],
-        [' ',' ',' ']]
+         [' ',' ',' '],
+         [' ',' ',' ']]
 
 def check(x,y):
     if board[0][y] == board[1][y] == board[2][y]:
