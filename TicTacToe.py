@@ -1,7 +1,7 @@
 import sys
-board = [[' ',' ',' '],
-         [' ',' ',' '],
-         [' ',' ',' ']]
+board = [['□','□','□'],
+         ['□','□','□'],
+         ['□','□','□']]
 
 def check(x,y):
     if board[0][y] == board[1][y] == board[2][y]:
@@ -33,9 +33,9 @@ while True:
         answer = input("\nWhat spot {}? ".format(pVal))
         answer = list(map(int,answer))
         try:
-            if board[answer[0] - 1][answer[1] - 1] not in ('x', 'y'):
+            if board[answer[0] - 1][answer[1] - 1] not in ('X', 'Y'):
                 if pVal == 'Player One':
-                    board[answer[0] - 1][answer[1] - 1] = 'x'
+                    board[answer[0] - 1][answer[1] - 1] = 'X'
                     if check((answer[0] -1), (answer[1] -1)) == True:
                         print("Player One winner!")
                         reprint()
@@ -43,7 +43,7 @@ while True:
                     else:
                         break
                 else:
-                    board[answer[0] - 1][answer[1] - 1] = 'y'
+                    board[answer[0] - 1][answer[1] - 1] = 'Y'
                     if check((answer[0] -1), (answer[1] -1)) == True:
                         print("Player Two winner!")
                         reprint()
