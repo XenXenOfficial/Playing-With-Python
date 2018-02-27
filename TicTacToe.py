@@ -1,4 +1,4 @@
-test = [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
+test = [['1',' ',' ',' '],['2',' ',' ',' '],['3',' ',' ',' ']]
 
 def check(x,y):
     if test[0][y] == test[1][y] == test[2][y]:
@@ -12,9 +12,11 @@ def check(x,y):
     return False
     
 def reprint():
+    print('   1', ' 2', ' 3')
     for i in range(len(test)):
         for i2 in range(len(test[i])):
-            print('|',test[i][i2], '|', end='',)
+            print(test[i][i2], '|' ,end='')
+            
         print()
         
 playerTurn = True
@@ -32,17 +34,17 @@ while True:
         answer = input("What spot {}? ".format(pVal))
         answer = list(map(int,answer))
         try:
-            if test[answer[0] - 1][answer[1] - 1] not in ('x', 'y'):
+            if test[answer[0] - 1][answer[1]] not in ('x', 'y'):
                 if pVal == 'Player One':
-                    test[answer[0] - 1][answer[1] - 1] = 'x'
-                    if check((answer[0] -1), (answer[1] -1)) == True:
+                    test[answer[0] - 1][answer[1]] = 'x'
+                    if check((answer[0] - 1), (answer[1])) == True:
                         print("Player One winner!")
                         reprint()
                     else:
                         break
                 else:
-                    test[answer[0] - 1][answer[1] - 1] = 'y'
-                    if check((answer[0] -1), (answer[1] -1)) == True:
+                    test[answer[0] - 1][answer[1]] = 'y'
+                    if check((answer[0] - 1), (answer[1])) == True:
                         print("Player Two winner!")
                         reprint()
                     else:
