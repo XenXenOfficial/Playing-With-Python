@@ -77,3 +77,7 @@ lass OutgoingChatImage(XMPPElement):
         }
     ]
 }
+
+<---- Debug File ---->
+[2018-10-11 23:42:48,824] INFO   (thread Kik Connection): [+] Sending chat image  to user '<---My Username--->_w8g@talk.kik.com'...
+[2018-10-11 23:42:48,825] DEBUG  (thread Kik Connection): [+] Sending raw data: b'<message type="chat" to="<---My Username--->_w8g@talk.kik.com" id="f3491a79-81de-4742-8cfb-975f095c70d8" cts="1539315768826"><kik push="true" qos="true" timestamp="1539315768826" /><request xmlns="kik:message:receipt" r="true" d="true" /><content app-id="com.kik.ext.gallery" id="42ee0b8b-4c6b-47ef-857a-a4e049f8e2cb" v="2"><strings><app-name>"Gallery"</app-name><allow-forward>True</allow-forward><file-name>"image.jpg"</file-name><file-url>www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg</file-url></strings><images><preview>www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg</preview><icon>https://storage.googleapis.com/bot-dashboard.appspot.com/hosted-images/ba6e21035b07b1adff974d092d21b53e</icon><name>"Gallery"</name></images></message>'
