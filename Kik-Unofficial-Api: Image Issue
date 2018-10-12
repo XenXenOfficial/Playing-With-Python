@@ -1,95 +1,79 @@
 <---- Running in the main bot class ---->
 
 def on_image_received(self, chat_message: chatting.IncomingImageMessage):
-        self.client.send_chat_image(chat_message.from_jid, False, "image.png", "https://www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg")
-        
+        self.client.send_chat_image(chat_message.group_jid, "www.catster.com/wp-content/uploads/2017/08/A-fluffy-cat-looking-funny-surprised-or-concerned.jpg")
+                
         
         
 <----  Edits made to the client.py file ---->
 
-  def send_chat_image(self, peer_jid: str, allow_forward: True, file_name: str, file_location: str):
+  def send_chat_image(self, peer_jid: str, file_url: str):
         if self.is_group_jid(peer_jid):
-            log.info("[+] Sending chat image '{}' to group '{}'...".format(file_name, peer_jid))
-            return self.send_xmpp_element(chatting.OutgoingGroupChatImage(peer_jid, allow_forward, file_name, file_location))
+            log.info("[+] Sending chat image to group '{}'...".format(peer_jid))
+            return self.send_xmpp_element(chatting.OutgoingGroupChatImage(peer_jid, file_url))
         else:
-            log.info("[+] Sending chat image '{}' to user '{}'...".format(file_name, peer_jid))
-            return self.send_xmpp_element(chatting.OutgoingChatImage(peer_jid, allow_forward, file_name, file_location))
+            log.info("[+] Sending chat image  to user '{}'...".format(peer_jid))
+            return self.send_xmpp_element(chatting.OutgoingChatImage(peer_jid, file_url))
             
             
 <---- Edits made to the chatting.py XMPP file ---->
-class OutgoingChatImage(XMPPElement):
+lass OutgoingChatImage(XMPPElement):
     """
     Represents an outgoing image chat message to another kik entity (member or group)
     """
-    def __init__(self, peer_jid, allow_forward, file_name, file_location, is_group=False):
+    def __init__(self, peer_jid, file_url, is_group=False):
         super().__init__()
         self.peer_jid = peer_jid
-        self.allow_forward = allow_forward
-        self.file_name = file_name
-        self.file_location = file_location
+        self.file_url = file_url
+        self.allow_forward = True
         self.is_group = is_group
     def serialize(self):
         timestamp = str(int(round(time.time() * 1000)))
         message_type = "chat" if not self.is_group else "groupchat"
+        iconUrl="https://storage.googleapis.com/bot-dashboard.appspot.com/hosted-images/ba6e21035b07b1adff974d092d21b53e"
+        images= ('<preview>{}</preview>'
+                 '<icon>{}</icon>'
+                 '<name>"Gallery"</name>'
+                ).format(self.file_url, iconUrl)
+                
+        strings=('<app-name>"Gallery"</app-name>'
+                 '<allow-forward>{}</allow-forward>'
+                 '<file-name>"image.jpg"</file-name>'
+                 '<file-url>{}</file-url>'
+                 ).format(self.allow_forward, self.file_url) 
+                 
         data = ('<message type="{}" to="{}" id="{}" cts="{}">'
                 '<kik push="true" qos="true" timestamp="{}" />'
-                '<request xmlns="jabber:client" r="true" d="true" />'
-                '<ri></ri>'
-                '<app-name>Gallery</app-name>'
-                '<allow-forward>{}</allow-forward'
-                '<file-name>{}</file-name>'
-                '<file-url>{}</file-url>'
+                '<request xmlns="kik:message:receipt" r="true" d="true" />'
+                '<content app-id="com.kik.ext.gallery" id="42ee0b8b-4c6b-47ef-857a-a4e049f8e2cb" v="2">'
+                '<strings>{}</strings>'
+                '<images>{}</images>'
                 '</message>'
                 ).format(message_type, self.peer_jid, self.message_id, timestamp,
-                    timestamp, self.allow_forward, self.file_name, self.file_location)
+                    timestamp, strings, images)
         return data.encode()
-class OutgoingGroupChatImage(XMPPElement):
-    def __init__(self, group_jid, allow_forward, file_name, file_location):
-        super().__init__(group_jid, allow_forward, file_name, file_location, is_group=True)
         
-<---- Kik chat image Data Structure ---->
-
-
-('message_id', '*message id*'), ('status', None), ('to_jid', 'user_*jid*'), ('requets_read_receipt', True), ('raw_element', <message cts="1539100962934" from="user_*jid*" id="109f34d0-5133-4798-a1a1-dcbbe4b30293" to="user_*jid*" type="chat" xmlns="jabber:client">
-
-<pb/>
-
-<kik app="chat" hop="true" push="true" qos="true" timestamp="1539100962934"/>
-
-<request d="true" r="true"/>
-
-<content app-id="com.kik.ext.gallery" id="a84b7966-6d1a-43a9-a172-9a31fa5a2fcb" v="2">
-
-<strings>
-<app-name>Gallery</app-name>
-
-<file-size>569964</file-size>
-
-<allow-forward>true</allow-forward>
-
-<file-name>(anything).jpg</file-name>
-
-<file-url>https://platform.kik.com/content/files/*file*</file-url>
-</strings>
-
-<----- Hash stuff ----->//I added this
-<extras/>
-<hashes>
-<sha1-scaled>
-*sha1*
-</sha1-scaled>
-<blockhash-scaled>*more hash*</blockhash-scaled>
-<sha1-original>*LOTS MORE HASH*</sha1-original>
-</hashes>
-<----- ||||||||||||||------>
-
-<images>
-<preview>
-</icon>
-</images>
-<uris/>
-</content>
-</message>)
-
-
-
+<---- Post Data from image sent from a user ---->
+{
+    "messages": [
+        {
+            "attribution": {
+                "iconUrl": "https://storage.googleapis.com/bot-dashboard.appspot.com/hosted-images/ba6e21035b07b1adff974d092d21b53e",
+                "style": "overlay",
+                "name": "Gallery"
+            },
+            "from": "<--My Username-->",
+            "timestamp": 1539312967123,
+            "chatType": "direct",
+            "mention": null,
+            "participants": [
+                "<--My Username-->"
+            ],
+            "picUrl": "https://platform.kik.com/content/files/d4834dd7-03cc-4518-bf54-46132a19f095?t=WcEDSOVvsz8l05hDuUZJcqWwGAQMa3x8QOEBtnfRvlaAzqAisZ-IAt0DQMdUCFkdU1uUfhAGhVDy4PqPFXJUAEC01UtlDpyqDUy-kjhWYUQvRwZwo2WDU5uUQqagdyka",
+            "readReceiptRequested": true,
+            "type": "picture",
+            "id": "d254509d-7e3e-438f-852c-8a22e3a108f1",
+            "chatId": "a5f4bf6234bec03e2acdc53eb82b0f25eef4d117c122ce56c1bb0d590c546597"
+        }
+    ]
+}
